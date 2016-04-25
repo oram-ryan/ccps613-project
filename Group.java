@@ -7,6 +7,7 @@ public class Group extends JPanel
 {
     private Group current = this;
     private boolean deleteMode = false;
+    private final static int MAXDICE = 14;
     
     private ArrayList<Die> diceList = new ArrayList<Die>();
     private ArrayList<JLabel> labelList = new ArrayList<JLabel>();
@@ -35,7 +36,7 @@ public class Group extends JPanel
         
         this.add(diePanel);
         diePanel.setLayout(new FlowLayout());
-        diePanel.setPreferredSize(new Dimension(295,25));
+        diePanel.setPreferredSize(new Dimension(475,25));
         
         this.add(addDiePanel);
         addDiePanel.setLayout(new FlowLayout());
@@ -61,6 +62,8 @@ public class Group extends JPanel
             labelList.add(temp);
             
             if (diceList.size() == 1) rollButton.setEnabled(true);
+            
+            if (diceList.size() >= MAXDICE) addButton.setEnabled(false);
             
             JLabel tempX = new JLabel("X");
             tempX.setForeground (Color.red);
@@ -135,6 +138,7 @@ public class Group extends JPanel
                     labelXList.remove(index);
                     
                     if (diceList.size() == 0) rollButton.setEnabled(false);
+                    else if (diceList.size() == MAXDICE - 1) addButton.setEnabled(true);
                     diePanel.revalidate();
                     diePanel.repaint();
                 }

@@ -6,14 +6,15 @@ import javax.swing.*;
 public class MainWindow extends JPanel
 {
     private static JFrame f = new JFrame("GetRolling");
+    private static JButton addGroupButton = new JButton("Add Group");
     private static ArrayList<Group> groupList = new ArrayList<Group>();
     private static ArrayList<JPanel> deletePanelList = new ArrayList<JPanel>();
     private static ArrayList<JButton> deleteList = new ArrayList<JButton>();
     private static int count = 0;
+    private final static int MAXGROUPS = 6;
     
     public MainWindow()
     {
-        JButton addGroupButton = new JButton("Add Group");
         addGroupButton.addActionListener(new deleteGroupListener());
         this.add(addGroupButton);
         
@@ -24,7 +25,15 @@ public class MainWindow extends JPanel
     {
         public void actionPerformed(ActionEvent ae)
         {
-            addGroup();
+            if (groupList.size() < MAXGROUPS - 1)
+            {
+                addGroup();
+            }
+            else if (groupList.size() == MAXGROUPS - 1)
+            {
+                addGroup();
+                addGroupButton.setEnabled(false);
+            }
         }
     }
     
@@ -55,6 +64,11 @@ public class MainWindow extends JPanel
         {
             Object source = ae.getSource();
             
+            if (groupList.size() == MAXGROUPS - 1)
+            {
+                addGroupButton.setEnabled(true);
+            }
+            
             if (source instanceof JButton)
             {
                 int index = deleteList.indexOf(source);
@@ -76,6 +90,7 @@ public class MainWindow extends JPanel
     {
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
+        f.setSize(640,480);
         f.add(new MainWindow());
         addGroup();
         f.pack();
