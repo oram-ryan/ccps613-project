@@ -8,17 +8,13 @@ public class MainWindow extends JPanel
     private static JFrame f = new JFrame("GetRolling");
     private static JButton addGroupButton = new JButton("Add Group");
     private static ArrayList<Group> groupList = new ArrayList<Group>();
-    private static ArrayList<JPanel> deletePanelList = new ArrayList<JPanel>();
-    private static ArrayList<JButton> deleteList = new ArrayList<JButton>();
     
     private static int count = 0;
-    private final static int MAXGROUPS = 6;
+    private final static int MAXGROUPS = 5;
     
     public MainWindow()
     {
-        addGroupButton.addActionListener(new deleteGroupListener());
         this.add(addGroupButton);
-        
         addGroupButton.addActionListener(new addGroupListener());
     }
     
@@ -48,43 +44,23 @@ public class MainWindow extends JPanel
         Group temp = new Group();
         f.add(temp);
         groupList.add(temp);
-        count++;
-        JPanel delPanTemp = new JPanel();
-        deletePanelList.add(delPanTemp); 
-        JButton delTemp = new JButton("Delete Group " + count);
-        delTemp.addActionListener(new deleteGroupListener());
-        deleteList.add(delTemp);
-        delPanTemp.add(delTemp);
-        f.add(delPanTemp);
         f.pack();
     }
     
-    private static class deleteGroupListener implements ActionListener 
+    public static void deleteGroup(Group current)
     {
-        public void actionPerformed(ActionEvent ae)
+        int index = groupList.indexOf(current);
+        if (index != -1)
         {
-            Object source = ae.getSource();
+            f.remove(groupList.get(index));
+            groupList.remove(index);
             
-            if (source instanceof JButton)
+            if (groupList.size() == MAXGROUPS - 1)
             {
-                int index = deleteList.indexOf(source);
-                if (index != -1)
-                {
-                    f.remove(groupList.get(index));
-                    f.remove(deletePanelList.get(index));
-                    f.remove((JButton) source);
-                    groupList.remove(index);
-                    deleteList.remove(index);
-                    deletePanelList.remove(index);
-                    
-                    if (groupList.size() == MAXGROUPS - 1)
-                    {
-                        addGroupButton.setEnabled(true);
-                    }
-                    
-                    f.pack();
-                }
+                addGroupButton.setEnabled(true);
             }
+            
+            f.pack();
         }
     }
     
@@ -95,6 +71,7 @@ public class MainWindow extends JPanel
         f.setSize(640,480);
         f.add(new MainWindow());
         addGroup();
+        f.setResizable(false);
         f.pack();
         f.setVisible(true);        
     }

@@ -17,10 +17,12 @@ public class Group extends JPanel
     private JPanel buttonPanel = new JPanel();
     private JPanel addDiePanel = new JPanel();
     private JPanel diePanel = new JPanel();
+    private JPanel deletePanel = new JPanel();
     
     private JButton rollButton = new JButton("Roll");
     private JButton editButton = new JButton("Edit");
     private JButton addButton = new JButton("+");
+    private JButton deleteButton = new JButton("Delete Group");
     
     public Group()
     {
@@ -30,6 +32,7 @@ public class Group extends JPanel
         buttonPanel.add(rollButton);
         buttonPanel.add(editButton);
         addDiePanel.add(addButton);
+        deletePanel.add(deleteButton);
         
         this.add(buttonPanel);
         buttonPanel.setLayout(new FlowLayout());
@@ -42,18 +45,31 @@ public class Group extends JPanel
         addDiePanel.setLayout(new FlowLayout());
         addDiePanel.setVisible(false);
         
+        this.add(deletePanel);
+        deletePanel.setLayout(new FlowLayout());
+        deletePanel.setVisible(false);
+        
         rollButton.addActionListener(new roll());
         editButton.addActionListener(new editDice());
         addButton.addActionListener(new addDie());
+        deleteButton.addActionListener(new deleteGroup());
 
         rollButton.setEnabled(false);
+    }
+    
+    public class deleteGroup implements ActionListener 
+    {
+        public void actionPerformed(ActionEvent ae)
+        {
+            MainWindow.deleteGroup(current);
+        }
     }
     
     public class addDie implements ActionListener 
     {
         public void actionPerformed(ActionEvent ae)
         {
-            Integer dieType = (Integer) JOptionPane.showInputDialog(null, "What sided die?", "Die Size Selection", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            Integer dieType = (Integer) JOptionPane.showInputDialog(current, "What sided die?", "Die Size Selection", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (dieType == null) return;
             
             diceList.add(new Die(dieType));
@@ -82,7 +98,7 @@ public class Group extends JPanel
     {
         public void actionPerformed(ActionEvent ae)
         {
-            new RollResults(diceList);
+            new RollResults(diceList, current);
         }
     }
     
@@ -96,6 +112,7 @@ public class Group extends JPanel
                 rollButton.setVisible(false);
                 editButton.setText("Exit Edit");
                 addDiePanel.setVisible(true);
+                deletePanel.setVisible(true);
                 
                 for(JLabel labelX : labelXList)
                 {
@@ -109,6 +126,7 @@ public class Group extends JPanel
                 rollButton.setVisible(true);
                 editButton.setText("Edit");
                 addDiePanel.setVisible(false);
+                deletePanel.setVisible(false);
                 
                 for(JLabel labelX : labelXList)
                 {
