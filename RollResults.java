@@ -6,10 +6,11 @@ import java.awt.font.*;
 
 public class RollResults
 {
-    public RollResults(ArrayList<Die> diceList)
+    public RollResults(ArrayList<Die> diceList,Group current)
     {
         JFrame rollFrame = new JFrame("Roll Results");
         rollFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        rollFrame.setLocationRelativeTo(current);
         rollFrame.setLayout(new GridLayout(1,2));
         Box rollResults1 = Box.createVerticalBox();
         Box rollResults2 = Box.createVerticalBox();

@@ -1,4 +1,4 @@
 #BlueJ class context
-comment0.params=diceList
-comment0.target=RollResults(java.util.ArrayList)
+comment0.params=diceList\ current
+comment0.target=RollResults(java.util.ArrayList,\ Group)
 numComments=1
