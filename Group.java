@@ -2,7 +2,6 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.Box;
 
 /**
  * Write a description of class Group here.
@@ -12,31 +11,45 @@ import javax.swing.Box;
  */
 public class Group extends JPanel
 {
+    private Group current = this;
+    private boolean deleteMode = false;
+    
     private ArrayList<Die> diceList = new ArrayList<Die>();
     private ArrayList<JLabel> labelList = new ArrayList<JLabel>();
+    private ArrayList<JLabel> labelXList = new ArrayList<JLabel>();
     private Integer[] options = new Integer[]{2,4,6,8,10,12,20,100};
-    private JPanel panel = new JPanel();
-    private boolean deleteMode = false;
+    
+    private JPanel buttonPanel = new JPanel();
+    private JPanel addDiePanel = new JPanel();
+    private JPanel diePanel = new JPanel();
+    
+    private JButton rollButton = new JButton("Roll");
+    private JButton editButton = new JButton("Edit");
+    private JButton addButton = new JButton("+");
     
     public Group()
     {
-        this.setPreferredSize(new Dimension(300,100));
         this.setBorder(BorderFactory.createEtchedBorder());
-         
-        JButton rollButton = new JButton("Roll");
-        JButton editButton = new JButton("Edit");
-       
-        this.add(rollButton);
-        this.add(editButton);
-        this.add(panel);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        panel.setLayout(new FlowLayout());
-        panel.setPreferredSize(new Dimension(295,200));
+        buttonPanel.add(rollButton);
+        buttonPanel.add(editButton);
+        addDiePanel.add(addButton);
         
+        this.add(buttonPanel);
+        buttonPanel.setLayout(new FlowLayout());
+        
+        this.add(diePanel);
+        diePanel.setLayout(new FlowLayout());
+        diePanel.setPreferredSize(new Dimension(295,25));
+        
+        this.add(addDiePanel);
+        addDiePanel.setLayout(new FlowLayout());
+        addDiePanel.setVisible(false);
         
         rollButton.addActionListener(new roll());
         editButton.addActionListener(new editDice());
-      
+        addButton.addActionListener(new addDie());
     }
     
     public class addDie implements ActionListener 
@@ -46,11 +59,17 @@ public class Group extends JPanel
             Integer dieType = (Integer) JOptionPane.showInputDialog(null, "What sided die?", "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             diceList.add(new Die(dieType));
             JLabel temp = new JLabel("d"+dieType.toString());
-            panel.add(temp);
-            temp.addMouseListener(new deleteMouse());
+            diePanel.add(temp);
             labelList.add(temp);
-            panel.revalidate();
-            panel.repaint();
+            JLabel tempX = new JLabel("X");
+            tempX.setForeground (Color.red);
+            tempX.addMouseListener(new deleteMouse());
+            tempX.setVisible(true);
+            diePanel.add(tempX);
+            labelXList.add(tempX);
+            diePanel.revalidate();
+            diePanel.repaint();
+            MainWindow.refresh();
         }
     }
     
@@ -74,6 +93,8 @@ public class Group extends JPanel
                 rollResults2.add(new JLabel(Integer.toString(d.roll())));
             }
             rollResults1.revalidate();
+            rollResults1.repaint();
+            rollResults2.revalidate();
             rollResults2.repaint();
             rollFrame.pack();
             rollFrame.setVisible(true);   
@@ -82,25 +103,30 @@ public class Group extends JPanel
     
     public class editDice implements ActionListener 
     {
-        JButton addButton = new JButton("+");
         public void actionPerformed(ActionEvent ae)
         { 
             deleteMode = deleteMode ? false : true;
    
             if (deleteMode){                
-                panel.add(addButton);
-                addButton.addActionListener(new addDie());
-                panel.setBackground(Color.red);
-                panel.repaint();
-                panel.revalidate();            
-            } else if (!deleteMode){
-                panel.remove(addButton);
-                for (ActionListener al : addButton.getActionListeners()){
-                    addButton.removeActionListener(al);
+                addDiePanel.setVisible(true);
+                for(JLabel labelX : labelXList)
+                {
+                    labelX.setVisible(true);
                 }
-                panel.setBackground(null);
-                panel.repaint();
-                panel.revalidate();                
+                current.repaint();
+                current.revalidate();
+                MainWindow.refresh();
+            } else if (!deleteMode){
+                addDiePanel.setVisible(false);
+                for(JLabel labelX : labelXList)
+                {
+                    labelX.setVisible(false);
+                }
+                diePanel.repaint();
+                diePanel.revalidate();
+                current.repaint();
+                current.revalidate(); 
+                MainWindow.refresh();
             }
             
         }
@@ -110,17 +136,19 @@ public class Group extends JPanel
     {
         public void mouseClicked(MouseEvent e)
         {
-            if(deleteMode)
+            Object source = e.getSource();
+            if (source instanceof JLabel)
             {
-                Object source = e.getSource();
-                if (source instanceof JLabel)
-                {
-                    int index = labelList.indexOf(source);
+                int index = labelXList.indexOf(source);
+                if (index != -1)
+                {   
+                    diePanel.remove(labelList.get(index));
+                    diePanel.remove((JLabel) source);
                     diceList.remove(index);
                     labelList.remove(index);
-                    panel.remove(index);
-                    panel.revalidate();
-                    panel.repaint();
+                    labelXList.remove(index);
+                    diePanel.revalidate();
+                    diePanel.repaint();
                 }
             }
         }

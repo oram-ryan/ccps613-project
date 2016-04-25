@@ -1,29 +1,74 @@
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class MainWindow extends JPanel
 {
-    public static JFrame f = new JFrame("GetRolling");
+    private static JFrame f = new JFrame("GetRolling");
+    private static ArrayList<Group> groupList = new ArrayList<Group>();
+    private static ArrayList<JPanel> deletePanelList = new ArrayList<JPanel>();
+    private static ArrayList<JButton> deleteList = new ArrayList<JButton>();
+    private static int count = 0;
     
     public MainWindow()
     {
-        this.setSize(new Dimension(300,50));
-        this.setBorder(BorderFactory.createEtchedBorder());
-        
         JButton addGroupButton = new JButton("Add Group");
+        addGroupButton.addActionListener(new deleteGroupListener());
         this.add(addGroupButton);
         
-        addGroupButton.addActionListener(new ButtonListener());
+        addGroupButton.addActionListener(new addGroupListener());
     }
     
-    private class ButtonListener implements ActionListener 
+    private static class addGroupListener implements ActionListener 
     {
         public void actionPerformed(ActionEvent ae)
         {
-            f.add(new Group());
-            f.pack();
-            f.setVisible(true);
+            addGroup();
+        }
+    }
+    
+    public static void refresh()
+    {
+        f.pack();
+    }
+    
+    private static void addGroup()
+    {
+        Group temp = new Group();
+        f.add(temp);
+        groupList.add(temp);
+        count++;
+        JPanel delPanTemp = new JPanel();
+        deletePanelList.add(delPanTemp); 
+        JButton delTemp = new JButton("Delete Group " + count);
+        delTemp.addActionListener(new deleteGroupListener());
+        deleteList.add(delTemp);
+        delPanTemp.add(delTemp);
+        f.add(delPanTemp);
+        f.pack();
+    }
+    
+    private static class deleteGroupListener implements ActionListener 
+    {
+        public void actionPerformed(ActionEvent ae)
+        {
+            Object source = ae.getSource();
+            
+            if (source instanceof JButton)
+            {
+                int index = deleteList.indexOf(source);
+                if (index != -1)
+                {
+                    f.remove(groupList.get(index));
+                    f.remove(deletePanelList.get(index));
+                    f.remove((JButton) source);
+                    groupList.remove(index);
+                    deleteList.remove(index);
+                    deletePanelList.remove(index);
+                    f.pack();
+                }
+            }
         }
     }
     
@@ -32,7 +77,7 @@ public class MainWindow extends JPanel
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
         f.add(new MainWindow());
-        f.add(new Group());
+        addGroup();
         f.pack();
         f.setVisible(true);        
     }
