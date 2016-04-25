@@ -2,6 +2,7 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.font.*;
 
 public class RollResults
 {
@@ -14,6 +15,18 @@ public class RollResults
         Box rollResults2 = Box.createVerticalBox();
         rollFrame.add(rollResults1);
         rollFrame.add(rollResults2);
+
+        JLabel labelType = new JLabel("Die");
+        Font font = labelType.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        labelType.setFont(font.deriveFont(attributes));
+        rollResults1.add(labelType);
+
+        JLabel labelResult = new JLabel("Result");
+        labelResult.setFont(font.deriveFont(attributes));
+        rollResults2.add(labelResult);
+        
         for (Die d : diceList)
         {
             rollResults1.add(new JLabel("d"+Integer.toString(d.getSides())));

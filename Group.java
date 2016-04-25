@@ -3,12 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-/**
- * Write a description of class Group here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Group extends JPanel
 {
     private Group current = this;
@@ -50,23 +44,31 @@ public class Group extends JPanel
         rollButton.addActionListener(new roll());
         editButton.addActionListener(new editDice());
         addButton.addActionListener(new addDie());
+
+        rollButton.setEnabled(false);
     }
     
     public class addDie implements ActionListener 
     {
         public void actionPerformed(ActionEvent ae)
         {
-            Integer dieType = (Integer) JOptionPane.showInputDialog(null, "What sided die?", "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            Integer dieType = (Integer) JOptionPane.showInputDialog(null, "What sided die?", "Die Size Selection", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if (dieType == null) return;
+            
             diceList.add(new Die(dieType));
             JLabel temp = new JLabel("d"+dieType.toString());
             diePanel.add(temp);
             labelList.add(temp);
+            
+            if (diceList.size() == 1) rollButton.setEnabled(true);
+            
             JLabel tempX = new JLabel("X");
             tempX.setForeground (Color.red);
             tempX.addMouseListener(new deleteMouse());
             tempX.setVisible(true);
             diePanel.add(tempX);
             labelXList.add(tempX);
+            
             diePanel.revalidate();
             diePanel.repaint();
             MainWindow.refresh();
@@ -77,7 +79,10 @@ public class Group extends JPanel
     {
         public void actionPerformed(ActionEvent ae)
         {
-             new RollResults(diceList);
+            if (diceList.size() > 0)
+            {
+                new RollResults(diceList);
+            }
         }
     }
     
@@ -87,7 +92,9 @@ public class Group extends JPanel
         { 
             deleteMode = deleteMode ? false : true;
    
-            if (deleteMode){                
+            if (deleteMode){
+                rollButton.setVisible(false);
+                editButton.setText("Exit Edit");
                 addDiePanel.setVisible(true);
                 for(JLabel labelX : labelXList)
                 {
@@ -97,6 +104,8 @@ public class Group extends JPanel
                 current.revalidate();
                 MainWindow.refresh();
             } else if (!deleteMode){
+                rollButton.setVisible(true);
+                editButton.setText("Edit");
                 addDiePanel.setVisible(false);
                 for(JLabel labelX : labelXList)
                 {
@@ -127,6 +136,8 @@ public class Group extends JPanel
                     diceList.remove(index);
                     labelList.remove(index);
                     labelXList.remove(index);
+                    
+                    if (diceList.size() == 0) rollButton.setEnabled(false);
                     diePanel.revalidate();
                     diePanel.repaint();
                 }
