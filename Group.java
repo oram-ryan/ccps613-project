@@ -79,10 +79,7 @@ public class Group extends JPanel
     {
         public void actionPerformed(ActionEvent ae)
         {
-            if (diceList.size() > 0)
-            {
-                new RollResults(diceList);
-            }
+            new RollResults(diceList);
         }
     }
     
