@@ -9,7 +9,6 @@ public class MainWindow extends JPanel
     private static JButton addGroupButton = new JButton("Add Group");
     private static ArrayList<Group> groupList = new ArrayList<Group>();
     
-    private static int count = 0;
     private final static int MAXGROUPS = 5;
     
     public MainWindow()
