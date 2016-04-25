@@ -96,10 +96,12 @@ public class Group extends JPanel
                 rollButton.setVisible(false);
                 editButton.setText("Exit Edit");
                 addDiePanel.setVisible(true);
+                
                 for(JLabel labelX : labelXList)
                 {
                     labelX.setVisible(true);
                 }
+                
                 current.repaint();
                 current.revalidate();
                 MainWindow.refresh();
@@ -107,10 +109,12 @@ public class Group extends JPanel
                 rollButton.setVisible(true);
                 editButton.setText("Edit");
                 addDiePanel.setVisible(false);
+                
                 for(JLabel labelX : labelXList)
                 {
                     labelX.setVisible(false);
                 }
+                
                 diePanel.repaint();
                 diePanel.revalidate();
                 current.repaint();
@@ -126,6 +130,7 @@ public class Group extends JPanel
         public void mouseClicked(MouseEvent e)
         {
             Object source = e.getSource();
+            
             if (source instanceof JLabel)
             {
                 int index = labelXList.indexOf(source);
@@ -139,6 +144,7 @@ public class Group extends JPanel
                     
                     if (diceList.size() == 0) rollButton.setEnabled(false);
                     else if (diceList.size() == MAXDICE - 1) addButton.setEnabled(true);
+                    
                     diePanel.revalidate();
                     diePanel.repaint();
                 }

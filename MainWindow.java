@@ -10,6 +10,7 @@ public class MainWindow extends JPanel
     private static ArrayList<Group> groupList = new ArrayList<Group>();
     private static ArrayList<JPanel> deletePanelList = new ArrayList<JPanel>();
     private static ArrayList<JButton> deleteList = new ArrayList<JButton>();
+    
     private static int count = 0;
     private final static int MAXGROUPS = 6;
     
@@ -64,11 +65,6 @@ public class MainWindow extends JPanel
         {
             Object source = ae.getSource();
             
-            if (groupList.size() == MAXGROUPS - 1)
-            {
-                addGroupButton.setEnabled(true);
-            }
-            
             if (source instanceof JButton)
             {
                 int index = deleteList.indexOf(source);
@@ -80,6 +76,12 @@ public class MainWindow extends JPanel
                     groupList.remove(index);
                     deleteList.remove(index);
                     deletePanelList.remove(index);
+                    
+                    if (groupList.size() == MAXGROUPS - 1)
+                    {
+                        addGroupButton.setEnabled(true);
+                    }
+                    
                     f.pack();
                 }
             }
