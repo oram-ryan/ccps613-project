@@ -23,6 +23,7 @@ public class MainWindow extends JPanel
         {
             f.add(new Group());
             
+            // Disables "Add Group" if max has been reached
             if (++groupCount == MAXGROUPS)
             {
                 addGroupButton.setEnabled(false);
@@ -40,8 +41,9 @@ public class MainWindow extends JPanel
     public static void deleteGroup(Group current)
     {
         f.remove(current);
-            
-        if (--groupCount == MAXGROUPS - 1)
+        
+        // Reenables "Add Group" if max had been reached before removal
+        if (groupCount-- == MAXGROUPS)
         {
             addGroupButton.setEnabled(true);
         }
