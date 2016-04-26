@@ -38,6 +38,11 @@ public class MainWindow extends JPanel
         f.pack();
     }
     
+    public static Frame getFrame()
+    {
+        return f;
+    }
+    
     public static void deleteGroup(Group current)
     {
         f.remove(current);

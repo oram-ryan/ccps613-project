@@ -8,14 +8,13 @@ public class RollResults
 {
     public RollResults(ArrayList<Die> diceList,Group current)
     {
-        JFrame rollFrame = new JFrame("Roll Results");
-        rollFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        rollFrame.setLocationRelativeTo(current);
-        rollFrame.setLayout(new GridLayout(1,2));
+        JDialog rollDialog = new JDialog(MainWindow.getFrame(),"Roll Result",true);
+        rollDialog.setLayout(new GridLayout(1,2));
         Box rollResults1 = Box.createVerticalBox();
         Box rollResults2 = Box.createVerticalBox();
-        rollFrame.add(rollResults1);
-        rollFrame.add(rollResults2);
+        
+        rollDialog.add(rollResults1);
+        rollDialog.add(rollResults2);
 
         JLabel labelType = new JLabel("Die");
         Font font = labelType.getFont();
@@ -36,11 +35,9 @@ public class RollResults
         {
             rollResults2.add(new JLabel(Integer.toString(d.roll())));
         }
-        rollResults1.revalidate();
-        rollResults1.repaint();
-        rollResults2.revalidate();
-        rollResults2.repaint();
-        rollFrame.pack();
-        rollFrame.setVisible(true);  
+        
+        rollDialog.pack();
+        rollDialog.setLocationRelativeTo(current);
+        rollDialog.setVisible(true);
     }
 }
