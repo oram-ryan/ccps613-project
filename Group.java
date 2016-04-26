@@ -69,7 +69,7 @@ public class Group extends JPanel
     {
         public void actionPerformed(ActionEvent ae)
         {
-            Integer dieType = (Integer) JOptionPane.showInputDialog(current, "What sided die?", "Die Size Selection", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            Integer dieType = (Integer) JOptionPane.showInputDialog(current, "Which sided die?", "Die Size Selection", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (dieType == null) return;
             
             diceList.add(new Die(dieType));
