@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class MainWindow extends JPanel
 {
-    private static JFrame f = new JFrame("GetRolling");
+    private static JFrame f = new JFrame("s");
     private static JButton addGroupButton = new JButton("Add Group");
     private static int groupCount = 0;
     

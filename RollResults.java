@@ -6,15 +6,21 @@ import java.awt.font.*;
 
 public class RollResults
 {
+    JDialog rollDialog = new JDialog(MainWindow.getFrame(),"Roll Results",true);
+    
     public RollResults(ArrayList<Die> diceList,Group current)
     {
-        JDialog rollDialog = new JDialog(MainWindow.getFrame(),"Roll Result",true);
-        rollDialog.setLayout(new GridLayout(1,2));
+        rollDialog.setLayout(new BoxLayout(rollDialog.getContentPane(), BoxLayout.Y_AXIS));
+        JPanel results = new JPanel();
+        rollDialog.add(results);
+        
         Box rollResults1 = Box.createVerticalBox();
         Box rollResults2 = Box.createVerticalBox();
         
-        rollDialog.add(rollResults1);
-        rollDialog.add(rollResults2);
+        rollResults1.createHorizontalStrut(20);
+        
+        results.add(rollResults1);
+        results.add(rollResults2);
 
         JLabel labelType = new JLabel("Die");
         Font font = labelType.getFont();
@@ -36,8 +42,22 @@ public class RollResults
             rollResults2.add(new JLabel(Integer.toString(d.roll())));
         }
         
+        JPanel donePanel = new JPanel();
+        JButton doneButton = new JButton("Done");
+        doneButton.addActionListener(new done());
+        donePanel.add(doneButton);
+        rollDialog.add(donePanel);
+        
         rollDialog.pack();
         rollDialog.setLocationRelativeTo(current);
         rollDialog.setVisible(true);
+    }
+    
+    public class done implements ActionListener 
+    {
+        public void actionPerformed(ActionEvent ae)
+        {
+            rollDialog.dispose();
+        }
     }
 }
