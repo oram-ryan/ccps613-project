@@ -7,7 +7,7 @@ public class MainWindow extends JPanel
 {
     private static JFrame f = new JFrame("GetRolling");
     private static JButton addGroupButton = new JButton("Add Group");
-    private static ArrayList<Group> groupList = new ArrayList<Group>();
+    private static int groupCount = 0;
     
     private final static int MAXGROUPS = 5;
     
@@ -21,15 +21,14 @@ public class MainWindow extends JPanel
     {
         public void actionPerformed(ActionEvent ae)
         {
-            if (groupList.size() < MAXGROUPS - 1)
+            f.add(new Group());
+            
+            if (++groupCount == MAXGROUPS)
             {
-                addGroup();
-            }
-            else if (groupList.size() == MAXGROUPS - 1)
-            {
-                addGroup();
                 addGroupButton.setEnabled(false);
             }
+            
+            f.pack();
         }
     }
     
@@ -38,29 +37,16 @@ public class MainWindow extends JPanel
         f.pack();
     }
     
-    private static void addGroup()
-    {
-        Group temp = new Group();
-        f.add(temp);
-        groupList.add(temp);
-        f.pack();
-    }
-    
     public static void deleteGroup(Group current)
     {
-        int index = groupList.indexOf(current);
-        if (index != -1)
+        f.remove(current);
+            
+        if (--groupCount == MAXGROUPS - 1)
         {
-            f.remove(groupList.get(index));
-            groupList.remove(index);
-            
-            if (groupList.size() == MAXGROUPS - 1)
-            {
-                addGroupButton.setEnabled(true);
-            }
-            
-            f.pack();
+            addGroupButton.setEnabled(true);
         }
+        
+        f.pack();
     }
     
     public static void main(String[] args)
@@ -68,8 +54,11 @@ public class MainWindow extends JPanel
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
         f.setSize(640,480);
+        
         f.add(new MainWindow());
-        addGroup();
+        f.add(new Group());
+        groupCount++;
+        
         f.setResizable(false);
         f.pack();
         f.setVisible(true);        
